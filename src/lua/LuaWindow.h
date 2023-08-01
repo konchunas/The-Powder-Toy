@@ -26,6 +26,7 @@ class LuaWindow
 	LuaComponentCallback onMouseWheelFunction;
 	LuaComponentCallback onKeyPressFunction;
 	LuaComponentCallback onKeyReleaseFunction;
+	LuaComponentCallback onGamepadButtonDownFunction;
 
 	std::map<LuaComponent *, LuaSmartRef> grabbed_components;
 
@@ -51,6 +52,7 @@ class LuaWindow
 	int onMouseWheel(lua_State * l);
 	int onKeyPress(lua_State * l);
 	int onKeyRelease(lua_State * l);
+	int onGamepadButtonDown(lua_State * l);
 
 	void triggerOnInitialized();
 	void triggerOnExit();
@@ -66,6 +68,8 @@ class LuaWindow
 	void triggerOnMouseWheel(int x, int y, int d);
 	void triggerOnKeyPress(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt);
 	void triggerOnKeyRelease(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt);
+	void triggerOnGamepadButtonDown(int gamepad_id, int button);
+
 
 public:
 	LuaScriptInterface * ci;

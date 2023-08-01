@@ -570,6 +570,11 @@ bool GameController::MouseWheel(int x, int y, int d)
 	return commandInterface->HandleEvent(MouseWheelEvent{ x, y, d });
 }
 
+bool GameController::GamepadButtonDown(int gamepad_id, int button)
+{
+	return commandInterface->HandleEvent(GamepadButtonDownEvent{ gamepad_id, button });
+}
+
 bool GameController::TextInput(String text)
 {
 	return commandInterface->HandleEvent(TextInputEvent{ text });

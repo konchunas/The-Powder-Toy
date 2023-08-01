@@ -12,6 +12,7 @@ int desktopHeight = 1024;
 SDL_Window *sdl_window = NULL;
 SDL_Renderer *sdl_renderer = NULL;
 SDL_Texture *sdl_texture = NULL;
+SDL_Joystick *joystick = NULL;
 int scale = 1;
 bool fullscreen = false;
 bool altFullscreen = false;
@@ -100,6 +101,14 @@ void SDLOpen()
 		Platform::Exit(-1);
 	}
 
+	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0)
+	{
+		fprintf(stderr, "Initializing SDL joystick failed: %s\n", SDL_GetError());
+		Platform::Exit(-1);
+	}
+
+    joystick = SDL_JoystickOpen(0);
+
 	if (!RecreateWindow())
 	{
 		fprintf(stderr, "Creating SDL window: %s\n", SDL_GetError());
@@ -125,6 +134,7 @@ void SDLOpen()
 
 void SDLClose()
 {
+    SDL_JoystickClose(joystick);
 	if (SDL_GetWindowFlags(sdl_window) & SDL_WINDOW_OPENGL)
 	{
 		// * nvidia-460 egl registers callbacks with x11 that end up being called
@@ -134,6 +144,7 @@ void SDLClose()
 		//   https://github.com/glfw/glfw/commit/9e6c0c747be838d1f3dc38c2924a47a42416c081
 		SDL_GL_LoadLibrary(NULL);
 		SDL_QuitSubSystem(SDL_INIT_VIDEO);
+		SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
 		SDL_GL_UnloadLibrary();
 	}
 	SDL_Quit();
@@ -215,7 +226,7 @@ bool RecreateWindow()
 	SDL_RaiseWindow(sdl_window);
 	SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
 	//Uncomment this to enable resizing
-	//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	//SDL_SetWindowResizable(sdl_window, SDL_TRUE);
 
 	LoadWindowPosition();
@@ -282,6 +293,10 @@ void EventProcess(const SDL_Event &event)
 		engine.onMouseMove(mousex, mousey);
 
 		hasMouseMoved = true;
+		break;
+	case SDL_JOYBUTTONDOWN:
+		printf("joy button down\n");
+		engine.onGamepadButtonDown(event.jbutton.which, event.jbutton.button);
 		break;
 	case SDL_DROPFILE:
 		engine.onFileDrop(event.drop.file);

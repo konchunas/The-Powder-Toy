@@ -1809,6 +1809,12 @@ void GameView::DoTextEditing(String text)
 		Window::DoTextEditing(text);
 }
 
+void GameView::DoGamepadButtonDown(int gamepad_id, int button)
+{
+	if(c->GamepadButtonDown(gamepad_id, button))
+		Window::DoGamepadButtonDown(gamepad_id, button);
+}
+
 void GameView::DoKeyPress(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt)
 {
 	if (shift && !shiftBehaviour)

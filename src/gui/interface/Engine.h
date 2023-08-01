@@ -36,6 +36,7 @@ namespace ui
 		void onTextEditing(String text, int start);
 		void onClose();
 		void onFileDrop(ByteString filename);
+		void onGamepadButtonDown(int gamepad_id, int button);
 
 		void Begin();
 		inline bool Running() { return running_; }

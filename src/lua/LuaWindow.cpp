@@ -32,6 +32,7 @@ Luna<LuaWindow>::RegType LuaWindow::methods[] = {
 	method(LuaWindow, onMouseWheel),
 	method(LuaWindow, onKeyPress),
 	method(LuaWindow, onKeyRelease),
+	method(LuaWindow, onGamepadButtonDown),
 	{0, 0}
 };
 
@@ -49,7 +50,8 @@ LuaWindow::LuaWindow(lua_State * l) :
 	onMouseUpFunction(l),
 	onMouseWheelFunction(l),
 	onKeyPressFunction(l),
-	onKeyReleaseFunction(l)
+	onKeyReleaseFunction(l),
+	onGamepadButtonDownFunction(l)
 {
 	this->l = l;
 	int posX = luaL_optinteger(l, 1, 1);
@@ -97,6 +99,10 @@ LuaWindow::LuaWindow(lua_State * l) :
 		void OnMouseWheel(int x, int y, int d) override { luaWindow->triggerOnMouseWheel(x, y, d); }
 		void OnKeyPress(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt) override { luaWindow->triggerOnKeyPress(key, scan, repeat, shift, ctrl, alt); }
 		void OnKeyRelease(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt) override { luaWindow->triggerOnKeyRelease(key, scan, repeat, shift, ctrl, alt); }
+		void OnGamepadButtonDown(int gamepad_id, int button) override {
+			printf("lua caught");
+			luaWindow->triggerOnGamepadButtonDown(gamepad_id, button);
+		}
 	};
 
 	window = new DrawnWindow(ui::Point(posX, posY), ui::Point(sizeX, sizeY), this);
@@ -396,6 +402,7 @@ void LuaWindow::triggerOnKeyPress(int key, int scan, bool repeat, bool shift, bo
 
 void LuaWindow::triggerOnKeyRelease(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt)
 {
+	printf("triggger key release");
 	if(onKeyReleaseFunction)
 	{
 		lua_rawgeti(l, LUA_REGISTRYINDEX, onKeyReleaseFunction);
@@ -405,6 +412,21 @@ void LuaWindow::triggerOnKeyRelease(int key, int scan, bool repeat, bool shift, 
 		lua_pushboolean(l, ctrl);
 		lua_pushboolean(l, alt);
 		if(tpt_lua_pcall(l, 5, 0, 0, false))
+		{
+			ci->Log(CommandInterface::LogError, tpt_lua_toString(l, -1));
+		}
+	}
+}
+
+void LuaWindow::triggerOnGamepadButtonDown(int gamepad_id, int button)
+{
+	printf("LuaWindow::triggerOnGamepadButtonDown\n");
+	if(onGamepadButtonDownFunction)
+	{
+		lua_rawgeti(l, LUA_REGISTRYINDEX, onGamepadButtonDownFunction);
+		lua_pushinteger(l, gamepad_id);
+		lua_pushinteger(l, button);
+		if(tpt_lua_pcall(l, 2, 0, 0, false))
 		{
 			ci->Log(CommandInterface::LogError, tpt_lua_toString(l, -1));
 		}
@@ -479,6 +501,11 @@ int LuaWindow::onKeyPress(lua_State * l)
 int LuaWindow::onKeyRelease(lua_State * l)
 {
 	return onKeyReleaseFunction.CheckAndAssignArg1(l);
+}
+
+int LuaWindow::onGamepadButtonDown(lua_State * l)
+{
+	return onGamepadButtonDownFunction.CheckAndAssignArg1(l);
 }
 
 void LuaWindow::ClearRef(LuaComponent *luaComponent)

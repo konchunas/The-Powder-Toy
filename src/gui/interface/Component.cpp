@@ -227,6 +227,10 @@ void Component::OnDefocus()
 
 }
 
+void Component::OnGamepadButtonDown(int gamepad_id, int button)
+{
+}
+
 Component::~Component()
 {
 	delete menu;

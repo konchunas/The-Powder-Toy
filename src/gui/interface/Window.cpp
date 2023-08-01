@@ -410,6 +410,20 @@ void Window::DoTextInput(String text)
 		finalise();
 }
 
+void Window::DoGamepadButtonDown(int gamepad_id, int button)
+{
+	if (focusedComponent_ != NULL)
+	{
+		if (focusedComponent_->Enabled && focusedComponent_->Visible)
+			focusedComponent_->OnGamepadButtonDown(gamepad_id, button);
+	}
+
+	if (!stop)
+		OnGamepadButtonDown(gamepad_id, button);
+	if (destruct)
+		finalise();
+}
+
 void Window::DoTextEditing(String text)
 {
 	if (focusedComponent_ != NULL)

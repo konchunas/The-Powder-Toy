@@ -75,6 +75,7 @@ public:
 	bool TextEditing(String text);
 	bool KeyPress(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt);
 	bool KeyRelease(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt);
+	bool GamepadButtonDown(int gamepad_id, int button);
 	void Tick();
 	void Blur();
 	void Exit();

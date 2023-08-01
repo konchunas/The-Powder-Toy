@@ -60,6 +60,12 @@ struct MouseWheelEvent
 	int d;
 };
 
+struct GamepadButtonDownEvent
+{
+	int gamepad_id;
+	int button;
+};
+
 struct TickEvent
 {
 };
@@ -93,5 +99,6 @@ using GameControllerEvent = std::variant<
 	BlurEvent,
 	CloseEvent,
 	BeforeSimEvent,
-	AfterSimEvent
+	AfterSimEvent,
+	GamepadButtonDownEvent
 >;

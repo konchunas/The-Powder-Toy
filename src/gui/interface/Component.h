@@ -206,5 +206,7 @@ namespace ui
 
 		virtual void OnFocus();
 		virtual void OnDefocus();
+
+		virtual void OnGamepadButtonDown(int gamepad_id, int button);
 	};
 }

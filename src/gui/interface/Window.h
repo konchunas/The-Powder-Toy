@@ -68,6 +68,7 @@ namespace ui
 		virtual void DoKeyRelease(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt);
 		virtual void DoTextInput(String text);
 		virtual void DoTextEditing(String text);
+		virtual void DoGamepadButtonDown(int gamepad_id, int button);
 
 		// Sets halt and destroy, this causes the Windows to stop sending events and remove itself.
 		void SelfDestruct();
@@ -108,6 +109,8 @@ namespace ui
 		virtual void OnKeyRelease(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt) {}
 		virtual void OnTextInput(String text) {}
 		virtual void OnTextEditing(String text) {}
+		virtual void OnGamepadButtonDown(int gamepad_id, int button) {}
+
 		std::vector<Component*> Components;
 		Component *focusedComponent_;
 		Component *hoverComponent;

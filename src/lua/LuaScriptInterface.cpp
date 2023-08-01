@@ -4252,6 +4252,7 @@ void LuaScriptInterface::initEventAPI()
 	lua_pushinteger(l, VariantIndex<GameControllerEvent, CloseEvent      >()); lua_setfield(l, -2, "close"      );
 	lua_pushinteger(l, VariantIndex<GameControllerEvent, BeforeSimEvent  >()); lua_setfield(l, -2, "beforesim"  );
 	lua_pushinteger(l, VariantIndex<GameControllerEvent, AfterSimEvent   >()); lua_setfield(l, -2, "aftersim"   );
+	lua_pushinteger(l, VariantIndex<GameControllerEvent, GamepadButtonDownEvent   >()); lua_setfield(l, -2, "gamepadbuttondown"   );
 }
 
 int LuaScriptInterface::event_register(lua_State * l)
@@ -4369,6 +4370,13 @@ static int PushGameControllerEvent(lua_State * l, const GameControllerEvent &eve
 		lua_pushinteger(l, mouseWheelEvent->y);
 		lua_pushinteger(l, mouseWheelEvent->d);
 		return 3;
+	}
+	else if (auto *gamepadButtonDownEvent = std::get_if<GamepadButtonDownEvent>(&event))
+	{
+		printf("gamepadButtonDownEvent");
+		lua_pushinteger(l, gamepadButtonDownEvent->gamepad_id);
+		lua_pushinteger(l, gamepadButtonDownEvent->button);
+		return 2;
 	}
 	return 0;
 }

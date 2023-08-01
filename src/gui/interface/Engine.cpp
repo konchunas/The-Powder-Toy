@@ -291,6 +291,14 @@ void Engine::onMouseMove(int x, int y)
 	mouseyp_ = y;
 }
 
+void Engine::onGamepadButtonDown(int gamepad_id, int button)
+{
+	if (state_ && !ignoreEvents)
+	{
+		state_->DoGamepadButtonDown(gamepad_id, button);
+	}
+}
+
 void Engine::onMouseWheel(int x, int y, int delta)
 {
 	if (state_ && !ignoreEvents)
