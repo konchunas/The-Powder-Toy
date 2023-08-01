@@ -1,4 +1,5 @@
 #include <cmath>
+#include <fstream>
 #include "gui/game/RenderPreset.h"
 #include "RasterDrawMethodsImpl.h"
 #include "Renderer.h"
@@ -49,6 +50,9 @@ void Renderer::clearScreen() {
 	else
 	{
 		std::fill_n(video.data(), VIDXRES * YRES, 0);
+		auto bkgdSize = backgroundImage->Size();
+		for(int y = 0; y < bkgdSize.Y; y++)
+			std::copy_n(backgroundImage->Data() + bkgdSize.X * y, bkgdSize.X, video.RowIterator(Vec2(0, y)));
 	}
 }
 
@@ -329,6 +333,8 @@ Renderer::Renderer(Simulation * sim):
 	std::fill(&graphicscache[0], &graphicscache[0] + PT_NUM, gcache_item());
 
 	prepare_alpha(CELL, 1.0f);
+
+	SetBackgroundImage();
 }
 
 void Renderer::CompileRenderMode()
@@ -451,6 +457,38 @@ void Renderer::SetColourMode(unsigned int mode)
 unsigned int Renderer::GetColourMode()
 {
 	return colour_mode;
+}
+
+void Renderer::SetBackgroundImage()
+{
+	//TODO switch to universal file reading
+	// std::vector<char> gameSaveData;
+	// if (!Platform::ReadFile(gameSaveData, openArg.value()))
+
+	// open file named "background.png" in the current directory
+	std::ifstream file("background.png", std::ios::binary);
+	if (file.is_open())
+	{
+		// get length of file:
+		file.seekg(0, file.end);
+		int length = file.tellg();
+		file.seekg(0, file.beg);
+
+		// read file into std::vector<char> const &
+		std::vector<char> vec(length);
+		file.read(vec.data(), length);
+
+		// close file:
+		file.close();
+
+		printf("Loaded background image\n");
+
+		backgroundImage = VideoBuffer::FromPNG(vec);	
+	}
+	else
+	{
+		// TODO fill with plain alternate color
+	}
 }
 
 void Renderer::ResetModes()

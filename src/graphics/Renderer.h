@@ -40,6 +40,7 @@ class Renderer: public RasterDrawMethods<Renderer>
 	using Video = PlaneAdapter<std::array<pixel, WINDOW.X * RES.Y>, WINDOW.X, RES.Y>;
 	Video video;
 	std::array<pixel, WINDOW.X * RES.Y> persistentVideo;
+	std::unique_ptr<VideoBuffer> backgroundImage;
 	Video warpVideo;
 
 	Rect<int> GetClipRect() const
@@ -137,6 +138,7 @@ public:
 	std::vector<unsigned int> GetDisplayMode();
 	void SetColourMode(unsigned int mode);
 	unsigned int GetColourMode();
+	void SetBackgroundImage();
 
 	void ResetModes();
 

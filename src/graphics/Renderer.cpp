@@ -521,6 +521,10 @@ void Renderer::render_parts()
 							BlendPixel({ nx-1, ny+1 }, RGBA<uint8_t>(colr, colg, colb, 112));
 						}
 					}
+					//health bar
+					DrawLine({nx-4, ny-4}, {nx+4, ny-4}, RGB<uint8_t>(127, 127, 127));
+					auto fillColor = RGB<uint8_t>((cplayer->pain * 25), 255-(cplayer->pain * 25), 0);
+					DrawLine({nx-(sim->parts[i].life / 25), ny-4}, {nx+(sim->parts[i].life / 25), ny-4}, fillColor);
 				}
 				if(pixel_mode & PMODE_FLAT)
 				{
