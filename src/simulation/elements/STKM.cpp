@@ -111,10 +111,10 @@ int Element_STKM_run_stickman(playerst *playerp, UPDATE_FUNC_ARGS)
 	float dt = 0.9f;///(FPSB*FPSB);  //Delta time in square
 	float gvx, gvy;
 	float gx, gy, dl, dr;
-	float rocketBootsHeadEffect = 0.35f;
-	float rocketBootsFeetEffect = 0.15f;
-	float rocketBootsHeadEffectV = 0.3f;// stronger acceleration vertically, to counteract gravity
-	float rocketBootsFeetEffectV = 0.45f;
+	float rocketBootsHeadEffect = 0.10f;
+	float rocketBootsFeetEffect = 0.05f;
+	float rocketBootsHeadEffectV = 0.2f;// stronger acceleration vertically, to counteract gravity
+	float rocketBootsFeetEffectV = 0.35f;
 
 	if (!playerp->fan && parts[i].ctype && sim->IsElementOrNone(parts[i].ctype))
 		Element_STKM_set_element(sim, playerp, parts[i].ctype);
@@ -284,7 +284,7 @@ int Element_STKM_run_stickman(playerst *playerp, UPDATE_FUNC_ARGS)
 				if (leg==1 && (((int)(playerp->comm)&0x02) == 0x02))
 					continue;
 				int footX = int(playerp->legs[leg*8+4]), footY = int(playerp->legs[leg*8+5]);
-				int np = sim->create_part(-1, footX, footY, PT_PLSM);
+				int np = sim->create_part(-1, footX, footY, PT_SMKE);
 				if (np>=0)
 				{
 					parts[np].vx = parts[i].vx+mvy*25;
@@ -334,7 +334,7 @@ int Element_STKM_run_stickman(playerst *playerp, UPDATE_FUNC_ARGS)
 				if (leg==0 && (((int)(playerp->comm)&0x01) == 0x01))
 					continue;
 				int footX = int(playerp->legs[leg*8+4]), footY = int(playerp->legs[leg*8+5]);
-				int np = sim->create_part(-1, footX, footY, PT_PLSM);
+				int np = sim->create_part(-1, footX, footY, PT_SMKE);
 				if (np>=0)
 				{
 					parts[np].vx = parts[i].vx-mvy*25;
@@ -369,7 +369,7 @@ int Element_STKM_run_stickman(playerst *playerp, UPDATE_FUNC_ARGS)
 			for (int leg=0; leg<2; leg++)
 			{
 				int footX = int(playerp->legs[leg*8+4]), footY = int(playerp->legs[leg*8+5]);
-				int np = sim->create_part(-1, footX, footY+1, PT_PLSM);
+				int np = sim->create_part(-1, footX, footY+1, PT_SMKE);
 				if (np>=0)
 				{
 					parts[np].vx = parts[i].vx+mvx*30;
@@ -636,7 +636,7 @@ void Element_STKM_interact(Simulation *sim, playerst *playerp, int i, int x, int
 			sim->parts[i].life -= sim->rng.between(32, 51);
 		}
 
-		if (sim->elements[TYP(r)].HeatConduct && (TYP(r)!=PT_HSWC||sim->parts[ID(r)].life==10) && ((playerp->elem!=PT_LIGH && sim->parts[ID(r)].temp>=323) || sim->parts[ID(r)].temp<=243) && (!playerp->rocketBoots || TYP(r)!=PT_PLSM))
+		if (sim->elements[TYP(r)].HeatConduct && (TYP(r)!=PT_HSWC||sim->parts[ID(r)].life==10) && ((playerp->elem!=PT_LIGH && sim->parts[ID(r)].temp>=323) || sim->parts[ID(r)].temp<=243) && (!playerp->rocketBoots || TYP(r)!=PT_SMKE))
 		{
 			sim->parts[i].life -= 2;
 			playerp->accs[3] -= 1;
@@ -723,7 +723,7 @@ void Element_STKM_init_legs(Simulation * sim, playerst *playerp, int i)
 	playerp->frames = 0;
 	playerp->spwn = 0;
 	playerp->fan = false;
-	playerp->rocketBoots = false;
+	playerp->rocketBoots = true;
 }
 
 void Element_STKM_set_element(Simulation *sim, playerst *playerp, int element)
@@ -734,7 +734,7 @@ void Element_STKM_set_element(Simulation *sim, playerst *playerp, int element)
 	    || sim->elements[element].Properties&TYPE_ENERGY
 	    || element == PT_LOLZ || element == PT_LOVE)
 	{
-		if (!playerp->rocketBoots || element != PT_PLSM)
+		if (!playerp->rocketBoots || element != PT_SMKE)
 		{
 			playerp->elem = element;
 			playerp->fan = false;

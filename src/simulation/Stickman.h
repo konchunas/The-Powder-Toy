@@ -13,4 +13,5 @@ struct playerst
 	bool rocketBoots;
 	bool fan;
 	int spawnID;         //id of the SPWN particle that spawns it
+	int pain;			//pain level
 };
