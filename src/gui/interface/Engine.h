@@ -5,6 +5,7 @@
 #include "common/ExplicitSingleton.h"
 #include "graphics/Pixel.h"
 #include "gui/interface/Point.h"
+#include <climits>
 
 class Graphics;
 namespace ui
@@ -93,6 +94,7 @@ namespace ui
 		bool resizable;
 
 		bool textInput = false;
+		int lastTextEditingStart = INT_MAX;
 
 		float dt;
 		float fps;
