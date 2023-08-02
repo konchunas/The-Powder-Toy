@@ -69,6 +69,9 @@
 # undef GetUserName // dammit windows
 #endif
 
+// TODO move to prefs
+const int STICK_DEADZONE = 2048;
+
 GameController::GameController():
 	firstTick(true),
 	foundSignID(-1),
@@ -570,6 +573,16 @@ bool GameController::MouseWheel(int x, int y, int d)
 	return commandInterface->HandleEvent(MouseWheelEvent{ x, y, d });
 }
 
+bool GameController::TextInput(String text)
+{
+	return commandInterface->HandleEvent(TextInputEvent{ text });
+}
+
+bool GameController::TextEditing(String text)
+{
+	return commandInterface->HandleEvent(TextEditingEvent{ text });
+}
+
 bool GameController::GamepadButtonDown(int gamepad_id, int button)
 {
 	return commandInterface->HandleEvent(GamepadButtonDownEvent{ gamepad_id, button });
@@ -580,7 +593,7 @@ bool GameController::GamepadAxisMotion(int gamepad_id, int axis, int value)
 	bool ret = commandInterface->HandleEvent(GamepadAxisMotionEvent{ gamepad_id, axis, value });
 
 	if (ret)
-{
+	{
 		Simulation * sim = gameModel->GetSimulation();
 		if (!gameView->GetPlacingSave())
 		{
@@ -590,8 +603,8 @@ bool GameController::GamepadAxisMotion(int gamepad_id, int axis, int value)
 			{
 				if (value > STICK_DEADZONE) { //right
 					player->comm = (int)(player->comm)|0x02;
-}
-
+				}
+					
 				else if (value < -STICK_DEADZONE) {//left
 					player->comm = (int)(player->comm)|0x01;
 				}
@@ -602,10 +615,11 @@ bool GameController::GamepadAxisMotion(int gamepad_id, int axis, int value)
 					printf("stop\n");
 				}
 			}
-			printf("axis %d value %d\n", axis, value);
+			if (value > STICK_DEADZONE)
+				printf("axis %d value %d\n", axis, value);
 
 			if (axis == 4)
-{
+			{
 				if (value > STICK_DEADZONE)
 					player->comm = (int)(player->comm)|0x04;
 				else

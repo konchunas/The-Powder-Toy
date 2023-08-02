@@ -44,6 +44,7 @@ void Element::Element_DTEC()
 	HighTemperatureTransition = NT;
 
 	DefaultProperties.tmp2 = 2;
+	DefaultProperties.tmp3 = -1;
 
 	Update = &update;
 	CtypeDraw = &Element::ctypeDrawVInTmp;

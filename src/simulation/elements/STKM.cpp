@@ -410,7 +410,18 @@ int Element_STKM_run_stickman(playerst *playerp, UPDATE_FUNC_ARGS)
 				if (!r && !sim->bmap[(y+ry)/CELL][(x+rx)/CELL])
 					continue;
 
-				Element_STKM_set_element(sim, playerp, TYP(r));
+				// Element_STKM_set_element(sim, playerp, TYP(r));
+				if (TYP(r) == PT_DTEC)
+				{
+					int dtec_id = ID(r);
+					if (parts[dtec_id].tmp3 > -1) {
+						int pickup = parts[dtec_id].tmp3;
+						Element_STKM_set_element(sim, playerp, parts[pickup].ctype);
+
+						sim->kill_part(pickup);
+					}
+				}
+
 				if (TYP(r) == PT_PLNT && parts[i].life<100) //Plant gives him 5 HP
 				{
 					if (parts[i].life<=95)
