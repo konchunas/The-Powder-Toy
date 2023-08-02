@@ -577,17 +577,43 @@ bool GameController::GamepadButtonDown(int gamepad_id, int button)
 
 bool GameController::GamepadAxisMotion(int gamepad_id, int axis, int value)
 {
-	return commandInterface->HandleEvent(GamepadAxisMotionEvent{ gamepad_id, axis, value });
+	bool ret = commandInterface->HandleEvent(GamepadAxisMotionEvent{ gamepad_id, axis, value });
+
+	if (ret)
+{
+		Simulation * sim = gameModel->GetSimulation();
+		if (!gameView->GetPlacingSave())
+		{
+			auto player = gamepad_id == 0 ? &sim->player2 : &sim->player; // swapped for now
+				// directional axis
+			if (axis == 0)
+			{
+				if (value > STICK_DEADZONE) { //right
+					player->comm = (int)(player->comm)|0x02;
 }
 
-bool GameController::TextInput(String text)
-{
-	return commandInterface->HandleEvent(TextInputEvent{ text });
-}
+				else if (value < -STICK_DEADZONE) {//left
+					player->comm = (int)(player->comm)|0x01;
+				}
+				
+				else { // stop directional movement
+					player->pcomm = player->comm;  //Saving last movement
+					player->comm = (int)(player->comm)&12;  //Stop command
+					printf("stop\n");
+				}
+			}
+			printf("axis %d value %d\n", axis, value);
 
-bool GameController::TextEditing(String text)
+			if (axis == 4)
 {
-	return commandInterface->HandleEvent(TextEditingEvent{ text });
+				if (value > STICK_DEADZONE)
+					player->comm = (int)(player->comm)|0x04;
+				else
+					player->comm = (int)(player->comm)&11;
+			}
+		}
+	}
+	return ret;
 }
 
 bool GameController::KeyPress(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt)
