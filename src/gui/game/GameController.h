@@ -76,6 +76,7 @@ public:
 	bool KeyPress(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt);
 	bool KeyRelease(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt);
 	bool GamepadButtonDown(int gamepad_id, int button);
+	bool GamepadAxisMotion(int gamepad_id, int axis, int value);
 	void Tick();
 	void Blur();
 	void Exit();

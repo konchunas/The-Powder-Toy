@@ -231,6 +231,10 @@ void Component::OnGamepadButtonDown(int gamepad_id, int button)
 {
 }
 
+void Component::OnGamepadAxisMotion(int gamepad_id, int axis, int value)
+{
+}
+
 Component::~Component()
 {
 	delete menu;

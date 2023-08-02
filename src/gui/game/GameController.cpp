@@ -575,6 +575,11 @@ bool GameController::GamepadButtonDown(int gamepad_id, int button)
 	return commandInterface->HandleEvent(GamepadButtonDownEvent{ gamepad_id, button });
 }
 
+bool GameController::GamepadAxisMotion(int gamepad_id, int axis, int value)
+{
+	return commandInterface->HandleEvent(GamepadAxisMotionEvent{ gamepad_id, axis, value });
+}
+
 bool GameController::TextInput(String text)
 {
 	return commandInterface->HandleEvent(TextInputEvent{ text });

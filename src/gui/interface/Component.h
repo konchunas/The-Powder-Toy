@@ -208,5 +208,6 @@ namespace ui
 		virtual void OnDefocus();
 
 		virtual void OnGamepadButtonDown(int gamepad_id, int button);
+		virtual void OnGamepadAxisMotion(int gamepad_id, int axis, int value);
 	};
 }

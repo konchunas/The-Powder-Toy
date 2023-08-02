@@ -304,6 +304,14 @@ void Engine::onGamepadButtonDown(int gamepad_id, int button)
 	}
 }
 
+void Engine::onGamepadAxisMotion(int gamepad_id, int axis, int value)
+{
+	if (state_ && !ignoreEvents)
+	{
+		state_->DoGamepadAxisMotion(gamepad_id, axis, value);
+	}
+}
+
 void Engine::onMouseWheel(int x, int y, int delta)
 {
 	if (state_ && !ignoreEvents)

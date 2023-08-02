@@ -66,6 +66,13 @@ struct GamepadButtonDownEvent
 	int button;
 };
 
+struct GamepadAxisMotionEvent
+{
+	int gamepad_id;
+	int axis;
+	int value;
+};
+
 struct TickEvent
 {
 };
@@ -100,5 +107,6 @@ using GameControllerEvent = std::variant<
 	CloseEvent,
 	BeforeSimEvent,
 	AfterSimEvent,
-	GamepadButtonDownEvent
+	GamepadButtonDownEvent,
+	GamepadAxisMotionEvent
 >;

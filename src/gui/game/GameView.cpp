@@ -1815,6 +1815,14 @@ void GameView::DoGamepadButtonDown(int gamepad_id, int button)
 		Window::DoGamepadButtonDown(gamepad_id, button);
 }
 
+
+void GameView::DoGamepadAxisMotion(int gamepad_id, int axis, int value)
+{
+	if(c->GamepadAxisMotion(gamepad_id, axis, value))
+		Window::DoGamepadAxisMotion(gamepad_id, axis, value);
+}
+
+
 void GameView::DoKeyPress(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt)
 {
 	if (shift && !shiftBehaviour)

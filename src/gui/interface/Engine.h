@@ -38,6 +38,7 @@ namespace ui
 		void onClose();
 		void onFileDrop(ByteString filename);
 		void onGamepadButtonDown(int gamepad_id, int button);
+		void onGamepadAxisMotion(int gamepad_id, int axis, int value);
 
 		void Begin();
 		inline bool Running() { return running_; }

@@ -295,8 +295,10 @@ void EventProcess(const SDL_Event &event)
 		hasMouseMoved = true;
 		break;
 	case SDL_JOYBUTTONDOWN:
-		printf("joy button down\n");
 		engine.onGamepadButtonDown(event.jbutton.which, event.jbutton.button);
+		break;
+	case SDL_JOYAXISMOTION:
+		engine.onGamepadAxisMotion(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
 		break;
 	case SDL_DROPFILE:
 		engine.onFileDrop(event.drop.file);

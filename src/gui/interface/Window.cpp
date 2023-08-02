@@ -424,6 +424,20 @@ void Window::DoGamepadButtonDown(int gamepad_id, int button)
 		finalise();
 }
 
+void Window::DoGamepadAxisMotion(int gamepad_id, int axis, int value)
+{
+	if (focusedComponent_ != NULL)
+	{
+		if (focusedComponent_->Enabled && focusedComponent_->Visible)
+			focusedComponent_->OnGamepadAxisMotion(gamepad_id, axis, value);
+	}
+
+	if (!stop)
+		OnGamepadAxisMotion(gamepad_id, axis, value);
+	if (destruct)
+		finalise();
+}
+
 void Window::DoTextEditing(String text)
 {
 	if (focusedComponent_ != NULL)

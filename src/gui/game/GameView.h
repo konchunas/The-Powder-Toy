@@ -224,6 +224,7 @@ public:
 	void DoKeyPress(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt) override;
 	void DoKeyRelease(int key, int scan, bool repeat, bool shift, bool ctrl, bool alt) override;
 	void DoGamepadButtonDown(int gamepad_id, int button) override;
+	void DoGamepadAxisMotion(int gamepad_id, int axis, int value) override;
 
 	class OptionListener;
 };
